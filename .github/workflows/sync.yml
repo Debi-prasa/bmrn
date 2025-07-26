@@ -1,0 +1,24 @@
+name: Push github directory to another azure devops repository
+on:
+  push:
+    branches:
+      - '*' # applies for all branches in github.
+  workflow_dispatch: # Manual trigger from GitHub UI
+ 
+jobs:
+  check-bats-version:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run script file
+      env:
+        AZUREPAT: ${{secrets.AZUREPAT}} # calling secrets from environment variables
+        AZUSERNAME: ${{secrets.AZUREUSERNAME}}
+        AZUSER_EMAIL: ${{secrets.AZURE_EMAIL}}
+        AZORG: ${{secrets.AZORG}}
+      run: |
+         ./.github/workflows/script/commit.ps1
+ 
+         ./.github/workflows/script/commit.ps1
+     # it will calls 'commit.ps1' file. Thats where our logic is in.
+      shell: pwsh
