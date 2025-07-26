@@ -14,7 +14,7 @@ jobs:
       - name: Checkout GitHub repository
         uses: actions/checkout@v2
 
-      - name: Run sync script to Azure DevOps
+            - name: Run sync script to Azure DevOps
         shell: pwsh
         env:
           AZUREPAT: ${{ secrets.AZUREPAT }}
@@ -22,4 +22,4 @@ jobs:
           AZURE_EMAIL: ${{ secrets.AZURE_EMAIL }}
           AZORG: ${{ secrets.AZORG }}
         run: |
-          & ".github/workflows/script/commit.ps1"
+          pwsh -File "./.github/workflows/script/commit.ps1"
