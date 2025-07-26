@@ -22,7 +22,7 @@ jobs:
           AZURE_EMAIL: ${{ secrets.AZURE_EMAIL }}
           AZORG: ${{ secrets.AZORG }}
         run: |
-          pwsh -File "./.github/workflows/script/commit.ps1"
+          pwsh -File "/.github/workflows/script/commit.ps1"
 <<<<<<< HEAD
 =======
 
