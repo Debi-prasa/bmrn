@@ -1,34 +1,43 @@
-#!/bin/bash
+# commit.ps1 — Sync GitHub to Azure DevOps
 
-
-# Assign environment variables to local variables (optional but cleaner)
-$AZUREPAT = $env:AZUREPAT
+# Get secrets from GitHub environment
+$AZUREPAT      = $env:AZUREPAT
 $AZUREUSERNAME = $env:AZUREUSERNAME
-$AZURE_EMAIL = $env:AZURE_EMAIL
-$AZORG = $env:AZORG
+$AZURE_EMAIL   = $env:AZURE_EMAIL
+$AZORG         = $env:AZORG
 
+# Set your Azure DevOps project and repo name
+$project = "bmrn"         # Replace if different
+$repo    = "bmrn"    # ✅ Your actual Azure DevOps repo name
 
-# Remove Git information (for fresh git start)
-#rm -rf bmrn/.git
+# Construct remote URL with authentication
+$remoteUrl = "https://$AZUREUSERNAME:$AZUREPAT@dev.azure.com/$AZORG/$project/_git/$repo"
 
+# Set Git config for commits
+git config user.name "$AZUREUSERNAME"
+git config user.email "$AZURE_EMAIL"
 
-# Fetch the changes from Azure DevOps to ensure we have latest
-git fetch --unshallow
+# Initialize Git if needed
+if (-not (Test-Path ".git")) {
+    Write-Host "Initializing git repository..."
+    git init
+}
 
+# Set up Azure DevOps remote
+if (git remote get-url azure 2>$null) {
+    git remote remove azure
+}
+git remote add azure $remoteUrl
 
-# Pull changes from Azure DevOps if its exiting branch and have commits on it
-git pull https://debiprasad0828@dev.azure.com/debiprasad0828/bmrn/_git/bmrn
+# Pull latest to avoid history issues
+try {
+    git fetch azure
+    git pull azure main --allow-unrelated-histories
+} catch {
+    Write-Host "Pull failed — likely first sync. Continuing..."
+}
 
-
-#git checkout -b $github_to_azure_sync
-
-
-# Set Git user identity
-git config --global user.email "$AZURE_EMAIL"
-git config --global user.name "$AZUREUSERNAME"
-
-
-# Add all changes into stage, commit, and push to Azure DevOps
+# Stage, commit, and push changes
 git add .
-git commit -m "Sync from GitHub to Azure DevOps"
-git push --force https://debiprasad0828@dev.azure.com/debiprasad0828/bmrn/_git/bmrn
+git commit -m "Sync from GitHub to Azure DevOps" --allow-empty
+git push azure HEAD:main --force
