@@ -14,8 +14,8 @@ $repo    = "bmrn"    # Replace with your Azure DevOps repo
 $remoteUrl = "https://${AZUREUSERNAME}:${AZUREPAT}@dev.azure.com/${AZORG}/${project}/_git/${repo}"
 
 # Set Git config
-git config user.name "$AZUREUSERNAME"
 git config user.email "$AZURE_EMAIL"
+git config user.name "$AZUREUSERNAME"
 
 # Init Git if needed
 if (-not (Test-Path ".git")) {
