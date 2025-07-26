@@ -23,3 +23,7 @@ jobs:
           AZORG: ${{ secrets.AZORG }}
         run: |
           pwsh -File "./.github/workflows/script/commit.ps1"
+<<<<<<< HEAD
+=======
+
+>>>>>>> fb934ac5607f378aaa70e87d221058829d960b2c
