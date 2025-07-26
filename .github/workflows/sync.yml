@@ -3,7 +3,7 @@ name: Push GitHub directory to Azure DevOps repository
 on:
   push:
     branches:
-      - '*'  # Trigger on all branches
+      - '*'
   workflow_dispatch:
 
 jobs:
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout GitHub repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # ✅ Full history required for push to Azure DevOps
 
       - name: Run sync script to Azure DevOps
         shell: pwsh
